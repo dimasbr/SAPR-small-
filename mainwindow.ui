@@ -86,9 +86,6 @@
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
               <column>
                <property name="text">
                 <string>Координата x</string>
@@ -316,16 +313,16 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QCheckBox" name="rightFix">
+         <widget class="QCheckBox" name="leftFix">
           <property name="text">
-           <string>Правая заделка</string>
+           <string>Левая заделка</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="leftFix">
+         <widget class="QCheckBox" name="rightFix">
           <property name="text">
-           <string>Левая заделка</string>
+           <string>Правая заделка</string>
           </property>
          </widget>
         </item>

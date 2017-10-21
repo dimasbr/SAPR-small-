@@ -35,9 +35,19 @@ private slots:
 
     void sortNodes();
 
+    void swapBars(int first, int right);
+
+    void sortBars();
+
     bool check();
 
 //    void redraw();
+    void on_verticalSlider_valueChanged(int value);
+
+    void on_rightFix_stateChanged(int arg1);
+
+    void on_leftFix_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene scene;

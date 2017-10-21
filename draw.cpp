@@ -1,6 +1,6 @@
 #include "draw.h"
 
-void draw(QTableWidget* nodes, QTableWidget* bars, QSlider* zoom, QGraphicsView* graphVW)
+void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QCheckBox* leftFix, QCheckBox* rightFix)
 {
     graphVW->scene()->clear();
 
@@ -94,6 +94,26 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QSlider* zoom, QGraphicsView*
     }
 
 
+
+    if(leftFix->isChecked())
+    {
+        for (int i=0; i < barsAreas.at(0)*perOneMmV-19; i=i+20)
+        {
+            graphVW->scene()->addLine(nodesCoordsOnScreen.at(0)+2, (-barsAreas.at(0)/2)*perOneMmV+i,
+                                      nodesCoordsOnScreen.at(0)-18, (-barsAreas.at(0)/2)*perOneMmV+i+20);
+        }
+    }
+
+    if(rightFix->isChecked())
+    {
+        for (int i=0; i < barsAreas.at(barsAreas.size()-1)*perOneMmV-19; i=i+20)
+        {
+            graphVW->scene()->addLine(nodesCoordsOnScreen.at(barsCoords.at(barsCoords.size()-1).second-1)+2,
+                                      (-barsAreas.at(barsAreas.size()-1)/2)*perOneMmV+i,
+                                      nodesCoordsOnScreen.at(barsCoords.at(barsCoords.size()-1).second-1)+22,
+                                      (-barsAreas.at(barsAreas.size()-1)/2)*perOneMmV+i+20);
+        }
+    }
 
 
     //unsigned int wec = (int)( (float)difX / 0.9 );

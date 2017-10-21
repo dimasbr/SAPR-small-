@@ -6,8 +6,9 @@
 #include <algorithm>
 #include <QSlider>
 #include <QGraphicsTextItem>
+#include <QCheckBox>
 
-void draw(QTableWidget* nodes, QTableWidget* bars, QSlider* zoom, QGraphicsView* graphVW);
+void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QCheckBox* leftFix, QCheckBox* rightFix);
 
 
 #endif // DRAW_H

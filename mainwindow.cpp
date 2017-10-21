@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->renderArea->scale(1.5, 1.5);
     //scene.setSceneRect(QRectF(0, 1, 0.5, 1));
     //ui->renderArea->fitInView(QRectF(-2, -2, 1, 1), Qt::KeepAspectRatio);
-    draw(ui->nodesTable, ui->barsTable, ui->verticalSlider, ui->renderArea);
+    draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
 }
 
 MainWindow::~MainWindow()
@@ -39,6 +39,49 @@ void MainWindow::swapNodes(int first, int second)
     ui->nodesTable->setItem(first, 1, force2);
     ui->nodesTable->setItem(second, 0, coord1);
     ui->nodesTable->setItem(second, 1, force1);
+
+    ui->nodesTable->setCurrentCell(second, 0);
+}
+
+void MainWindow::swapBars(int first, int second)
+{
+    QTableWidgetItem* begin1 = ui->barsTable->takeItem(first, 0);
+    QTableWidgetItem* begin2 = ui->barsTable->takeItem(second, 0);
+
+    QTableWidgetItem* end1 = ui->barsTable->takeItem(first, 1);
+    QTableWidgetItem* end2 = ui->barsTable->takeItem(second, 1);
+
+    QTableWidgetItem* area1 = ui->barsTable->takeItem(first, 2);
+    QTableWidgetItem* area2 = ui->barsTable->takeItem(second, 2);
+
+    QTableWidgetItem* freq1 = ui->barsTable->takeItem(first, 3);
+    QTableWidgetItem* freq2 = ui->barsTable->takeItem(second, 3);
+
+    QTableWidgetItem* maxFrc1 = ui->barsTable->takeItem(first, 4);
+    QTableWidgetItem* maxFrc2 = ui->barsTable->takeItem(second, 4);
+
+    QTableWidgetItem* frc1 = ui->barsTable->takeItem(first, 5);
+    QTableWidgetItem* frc2 = ui->barsTable->takeItem(second, 5);
+
+    ui->barsTable->setItem(first, 0, begin2);
+    ui->barsTable->setItem(second, 0, begin1);
+
+    ui->barsTable->setItem(first, 1, end2);
+    ui->barsTable->setItem(second, 1, end1);
+
+    ui->barsTable->setItem(first, 2, area2);
+    ui->barsTable->setItem(second, 2, area1);
+
+    ui->barsTable->setItem(first, 3, freq2);
+    ui->barsTable->setItem(second, 3, freq1);
+
+    ui->barsTable->setItem(first, 4, maxFrc2);
+    ui->barsTable->setItem(second, 4, maxFrc1);
+
+    ui->barsTable->setItem(first, 5, frc2);
+    ui->barsTable->setItem(second, 5, frc1);
+
+    ui->barsTable->setCurrentCell(second, 0);
 }
 
 
@@ -60,10 +103,30 @@ void MainWindow::sortNodes()
     }
 }
 
+void MainWindow::sortBars()
+{
+    int i = 1;
+    int j;
+
+    while (i < ui->barsTable->rowCount())
+    {
+        j=i;
+
+        while ((j>0) && (ui->barsTable->item(j-1, 0)->text().toUInt() > ui->barsTable->item(j, 0)->text().toUInt()  ))
+        {
+            swapBars(j, j-1);
+            j--;
+        }
+        i++;
+    }
+}
+
 
 bool MainWindow::check()
 {
     ui->errorWarning->setVisible(false);
+
+
 
     QTableWidgetItem* temp;
     std::set<unsigned int> coords;
@@ -91,6 +154,7 @@ bool MainWindow::check()
     sortNodes();
 
 
+
     for (int i=0; i < ui->barsTable->rowCount(); i++)
     {
         for (int k=0; k < ui->barsTable->columnCount(); k++)
@@ -100,6 +164,8 @@ bool MainWindow::check()
                 return false;
         }
     }
+
+    sortBars();
 
 
     std::set<unsigned int> begins;
@@ -122,6 +188,12 @@ bool MainWindow::check()
             tmpEnd = tempBuffer;
         }
 
+        if(tmpBeg != (tmpEnd-1))
+        {
+            tempEnd->setText(QString::number(tmpBeg+1));
+            tmpEnd=tmpBeg+1;
+        }
+
         if(begins.count(tmpBeg))
         {
             ui->errorWarning->setVisible(true);
@@ -142,19 +214,16 @@ bool MainWindow::check()
         }
         ends.insert(tmpEnd);
 
-        if(tmpBeg == tmpEnd)
-        {
-            ui->errorWarning->setVisible(true);
-            ui->errorWarning->setText( "<html><head/><body><p><span style=\"\
-                                       font-weight:600; color:#e20000;\">ОШИБКА! Стержень начинается и заканчивается в одном узле!\
-                                       </span></p></body></html>");
-            return false;
-        }
+//        if(tmpBeg == tmpEnd)
+//        {
+//            ui->errorWarning->setVisible(true);
+//            ui->errorWarning->setText( "<html><head/><body><p><span style=\"\
+//                                       font-weight:600; color:#e20000;\">ОШИБКА! Стержень начинается и заканчивается в одном узле!\
+//                                       </span></p></body></html>");
+//            return false;
+//        }
 
-        if(tmpBeg != (tmpEnd-1))
-        {
-            tempEnd->setText(QString::number(tmpBeg+1));
-        }
+
 
         if(i)
         {
@@ -209,6 +278,10 @@ void MainWindow::on_deleteNode_clicked()
         {
             ui->barsTable->item(i, 1)->setText(QString::number(ui->nodesTable->rowCount()));
         }
+    }
+    if (check())
+    {
+        draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
     }
 }
 
@@ -324,6 +397,10 @@ void MainWindow::on_addBar_clicked()
 void MainWindow::on_deleteBar_clicked()
 {
     ui->barsTable->removeRow(ui->barsTable->currentRow());
+    if (check())
+    {
+        draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
+    }
 }
 
 void MainWindow::on_nodesTable_cellChanged(int row, int column)
@@ -357,7 +434,7 @@ void MainWindow::on_nodesTable_cellChanged(int row, int column)
 
     if (check())
     {
-        draw(ui->nodesTable, ui->barsTable, ui->verticalSlider, ui->renderArea);
+        draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
     }
 }
 
@@ -460,7 +537,29 @@ void MainWindow::on_barsTable_cellChanged(int row, int column)
 
     if (check())
     {
-        draw(ui->nodesTable, ui->barsTable, ui->verticalSlider, ui->renderArea);
+        draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
     }
 
+}
+
+void MainWindow::on_verticalSlider_valueChanged(int value)
+{
+    ui->renderArea->resetMatrix();
+    ui->renderArea->scale(value, value);
+}
+
+void MainWindow::on_rightFix_stateChanged(int arg1)
+{
+    if (check())
+    {
+        draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
+    }
+}
+
+void MainWindow::on_leftFix_stateChanged(int arg1)
+{
+    if (check())
+    {
+        draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
+    }
 }
