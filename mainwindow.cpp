@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->renderArea->scale(1.5, 1.5);
     //scene.setSceneRect(QRectF(0, 1, 0.5, 1));
     //ui->renderArea->fitInView(QRectF(-2, -2, 1, 1), Qt::KeepAspectRatio);
+    draw(ui->nodesTable, ui->barsTable, ui->verticalSlider, ui->renderArea);
 }
 
 MainWindow::~MainWindow()

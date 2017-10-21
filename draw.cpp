@@ -2,6 +2,8 @@
 
 void draw(QTableWidget* nodes, QTableWidget* bars, QSlider* zoom, QGraphicsView* graphVW)
 {
+    graphVW->scene()->clear();
+
     std::vector<unsigned int> nodesCoords;
     std::vector<double> nodesForces;
 
@@ -30,24 +32,72 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QSlider* zoom, QGraphicsView*
 
  //   graphVW->scene()->addLine(graphVW->);
 
+    unsigned int spaceH = 40;
+    unsigned int spaceV = 40;
 
     unsigned int difX;
     unsigned int difY;
 
+    unsigned int wep = graphVW->viewport()->width();
+    unsigned int hep = graphVW->viewport()->height();
+
+    QPen standartPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap);
+    graphVW->scene()->addLine(0, 0, wep, 0, standartPen);
+    graphVW->scene()->addLine(wep, 0, wep-10, 10, standartPen);
+    graphVW->scene()->addLine(wep, 0, wep-10, -10, standartPen);
+
     if(!nodes->rowCount()) return;
+    difX = nodesCoords[nodesCoords.size()-1] - nodesCoords[0];
+
+    unsigned int perOneMmH;
+    if(difX)
+    {
+        perOneMmH = (wep - 2*spaceH)/difX;
+    }
+    else
+    {
+        perOneMmH = (wep - 2*spaceH)/2;
+    }
+
+    std::vector<unsigned int> nodesCoordsOnScreen;
+    for(int i=0; i<nodesCoords.size(); i++)
+    {
+        unsigned int tempCoord = spaceH+nodesCoords.at(i)*perOneMmH;
+        graphVW->scene()->addEllipse(tempCoord, -4, 8, 8, standartPen);
+        QGraphicsTextItem* tempText = graphVW->scene()->addText(QString::number(i+1));
+        tempText->setPos(tempCoord+8, 0);
+        graphVW->scene()->addEllipse(tempCoord+8, 5, 15, 15, standartPen);
+        nodesCoordsOnScreen.push_back(tempCoord);
+    }
+
+
     if(!bars->rowCount()) return;
-    difX = nodesCoords[0] - nodesCoords[nodesCoords.size()-1];
-    difY = (*(std::max_element(barsAreas.begin(), barsAreas.end()))) / 2;
+    difY = (*(std::max_element(barsAreas.begin(), barsAreas.end()))) ;
+
+    unsigned int perOneMmV;
+    if(difY)
+    {
+        perOneMmV = (hep - 2*spaceV)/difY;
+    }
+    else
+    {
+        perOneMmV = (hep - 2*spaceV)/2;
+    }
+    for(int i=0; i<bars->rowCount(); i++)
+    {
+        unsigned int begin = barsCoords.at(i).first;
+        unsigned int end = barsCoords.at(i).second;
+        unsigned int begCrd = nodesCoordsOnScreen.at(begin-1);
+        unsigned int endCrd = nodesCoordsOnScreen.at(end-1);
+        graphVW->scene()->addRect(begCrd+4, (barsAreas.at(i)/2)*perOneMmV, endCrd-begCrd,
+                                  -(barsAreas.at(i))*perOneMmV, standartPen);
+    }
 
 
 
-    unsigned int we = (int)( (float)difX / 0.9 );
-    unsigned int he = (int)( (float)difY / 0.9 );
 
-    unsigned int spaceH = (we-difX)/2;
-    unsigned int spaceV = (he-difY)/2;
-
-    graphVW->scene()->addLine(0, he/2, we, he/2);
-    graphVW->fitInView(QRectF());
+    //unsigned int wec = (int)( (float)difX / 0.9 );
+    //unsigned int hec = (int)( (float)difY / 0.9 );
+//    graphVW->fitInView(QRectF(0-spaceH, he/2, we, -(he/2) ), Qt::KeepAspectRatio);
 }
 
