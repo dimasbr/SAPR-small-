@@ -190,8 +190,19 @@ bool MainWindow::check()
 
         if(tmpBeg != (tmpEnd-1))
         {
-            tempEnd->setText(QString::number(tmpBeg+1));
-            tmpEnd=tmpBeg+1;
+            if(tmpEnd < ui->nodesTable->rowCount())
+            {
+                tempEnd->setText(QString::number(tmpBeg+1));
+                tmpEnd=tmpBeg+1;
+            }
+            else
+            {
+                ui->errorWarning->setVisible(true);
+                ui->errorWarning->setText( "<html><head/><body><p><span style=\"\
+                                           font-weight:600; color:#e20000;\">ОШИБКА! Стержень начинается и заканчивается в одном узле!!\
+                                           </span></p></body></html>");
+                return false;
+            }
         }
 
         if(begins.count(tmpBeg))
@@ -235,9 +246,20 @@ bool MainWindow::check()
                 ui->errorWarning->setText( "<html><head/><body><p><span style=\"\
                                            font-weight:600; color:#e20000;\">ОШИБКА! Конструкция не целостная!\
                                            </span></p></body></html>");
+                return false;
             }
         }
 
+    }
+
+    if(!begins.count(1) || !ends.count(ui->nodesTable->rowCount()))
+    {
+        ui->errorWarning->setVisible(true);
+        ui->errorWarning->setText( "<html><head/><body><p><span style=\"\
+                                   font-weight:600; color:#e20000;\">ОШИБКА! Свободный узел!\
+                                   </span></p></body></html>");
+
+        return false;
     }
 
     return true;
@@ -276,7 +298,9 @@ void MainWindow::on_deleteNode_clicked()
         temp = ui->barsTable->item(i, 1)->text().toUInt();
         if (temp > ui->nodesTable->rowCount())
         {
-            ui->barsTable->item(i, 1)->setText(QString::number(ui->nodesTable->rowCount()));
+            int blabla=ui->nodesTable->rowCount();
+            QTableWidgetItem* bla = ui->barsTable->item(i, 1);
+            /*ui->barsTable->item(i, 1)*/bla->setText(QString::number(ui->nodesTable->rowCount()));
         }
     }
     if (check())

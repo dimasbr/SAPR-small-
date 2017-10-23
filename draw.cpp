@@ -58,6 +58,10 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
     {
         perOneMmH = (wep - 2*spaceH)/2;
     }
+    if(!perOneMmH)
+    {
+        perOneMmH++;
+    }
 
     std::vector<unsigned int> nodesCoordsOnScreen;
     for(int i=0; i<nodesCoords.size(); i++)
@@ -82,6 +86,11 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
     else
     {
         perOneMmV = (hep - 2*spaceV)/2;
+    }
+
+    if(!perOneMmV)
+    {
+        perOneMmV++;
     }
     for(int i=0; i<bars->rowCount(); i++)
     {
