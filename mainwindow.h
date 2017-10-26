@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QFileDialog>
+#include <QMessageBox>
 #include "draw.h"
 #include "saveload.h"
 
@@ -53,6 +54,8 @@ private slots:
     void on_actionSave_triggered();
 
     void on_actionLoad_triggered();
+
+    void on_actionHelp_triggered();
 
 private:
     Ui::MainWindow *ui;

@@ -634,3 +634,10 @@ void MainWindow::on_actionLoad_triggered()
                                                         QString(""), QString("*.ban")).toStdString();
     loadProj(ui->nodesTable, ui->barsTable, ui->leftFix, ui->rightFix, fileName);
 }
+
+void MainWindow::on_actionHelp_triggered()
+{
+    QMessageBox helpText;
+    helpText.setText("<html><head/><body><p>Программа написана.</p></body></html>");
+    helpText.exec();
+}
