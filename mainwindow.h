@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QFileDialog>
 #include "draw.h"
+#include "saveload.h"
 
 namespace Ui {
 class MainWindow;
@@ -47,6 +49,10 @@ private slots:
     void on_rightFix_stateChanged(int arg1);
 
     void on_leftFix_stateChanged(int arg1);
+
+    void on_actionSave_triggered();
+
+    void on_actionLoad_triggered();
 
 private:
     Ui::MainWindow *ui;

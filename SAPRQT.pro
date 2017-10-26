@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    draw.cpp
+    draw.cpp \
+    saveload.cpp
 
 HEADERS  += mainwindow.h \
-    draw.h
+    draw.h \
+    saveload.h
 
 FORMS    += mainwindow.ui

@@ -616,3 +616,17 @@ void MainWindow::on_leftFix_stateChanged(int arg1)
         draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
     }
 }
+
+void MainWindow::on_actionSave_triggered()
+{
+    std::string fileName = QFileDialog::getSaveFileName(0, QString("Сохранить проект"),
+                                                        QString(""), QString("*.ban")).toStdString();
+    saveProj(ui->nodesTable, ui->barsTable, ui->leftFix, ui->rightFix, fileName);
+}
+
+void MainWindow::on_actionLoad_triggered()
+{
+    std::string fileName = QFileDialog::getOpenFileName(0, QString("Открыть проект"),
+                                                        QString(""), QString("*.ban")).toStdString();
+    loadProj(ui->nodesTable, ui->barsTable, ui->leftFix, ui->rightFix, fileName);
+}
