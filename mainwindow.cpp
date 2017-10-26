@@ -502,6 +502,13 @@ void MainWindow::on_barsTable_cellChanged(int row, int column)
         {
 
         }
+
+        if(temp == 0)
+        {
+            ui->barsTable->item(row, column)->setText(QString::number(1));
+            temp=1;
+        }
+
         if (ui->nodesTable->rowCount() >= temp)
         {
             ui->barsTable->item(row, column)->setText(QString::number(temp));
