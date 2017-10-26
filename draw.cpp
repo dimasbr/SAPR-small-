@@ -43,7 +43,7 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
 
     QPen standartPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap);
     QPen nFPen(Qt::blue, 4, Qt::SolidLine, Qt::RoundCap);
-    QPen bFPen(Qt::black, 4, Qt::SolidLine, Qt::RoundCap);
+    QPen bFPen(Qt::green, 4, Qt::SolidLine, Qt::RoundCap);
     graphVW->scene()->addLine(0, 0, wep, 0, standartPen);
     graphVW->scene()->addLine(wep, 0, wep-10, 10, standartPen);
     graphVW->scene()->addLine(wep, 0, wep-10, -10, standartPen);
@@ -119,18 +119,18 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
         if(barsFrc.at(i))
         {
 
-            for(int k=begCrd; k<endCrd-6; k+=5)
+            for(int k=begCrd; k<endCrd-11; k+=10)
             {
-                graphVW->scene()->addLine(begCrd+k, 0, begCrd+k+5, 0);
+                graphVW->scene()->addLine(k, 0, k+10, 0);
                 if(barsFrc.at(i)>=0)
                 {
-                graphVW->scene()->addLine(begCrd+k+5, 0, begCrd+k+3, 2, bFPen);
-                graphVW->scene()->addLine(begCrd+k+5, 0, begCrd+k+3, -2, bFPen);
+                graphVW->scene()->addLine(k+10, 0, k+6, 4, bFPen);
+                graphVW->scene()->addLine(k+10, 0, k+6, -4, bFPen);
                 }
                 else
                 {
-                    graphVW->scene()->addLine(begCrd+k, 0, begCrd+k+2, 2, bFPen);
-                    graphVW->scene()->addLine(begCrd+k, 0, begCrd+k+2, -2, bFPen);
+                    graphVW->scene()->addLine(k, 0, k+4, 4, bFPen);
+                    graphVW->scene()->addLine(k, 0, k+4, -4, bFPen);
                 }
             }
         }

@@ -167,6 +167,24 @@ bool MainWindow::check()
 
     sortBars();
 
+    if(ui->leftFix->isChecked())
+    {
+        if(ui->nodesTable->rowCount() && ui->nodesTable->item(0,1)->text().toDouble()<0)
+        {
+            ui->nodesTable->item(0, 1)->setText(QString::number(-(ui->nodesTable->item(0,1)->text().toDouble())));
+        }
+    }
+    if(ui->rightFix->isChecked())
+    {
+        int tempSize = ui->nodesTable->rowCount();
+        if(tempSize && ui->nodesTable->item(tempSize-1,1)->text().toDouble()>0)
+        {
+            ui->nodesTable->item(tempSize-1, 1)->setText(QString::number(-(ui->nodesTable->item(tempSize-1,1)->text().toDouble())));
+        }
+    }
+
+
+
 
     std::set<unsigned int> begins;
     std::set<unsigned int> ends;
@@ -236,6 +254,15 @@ bool MainWindow::check()
 
 
 
+        if(!(ui->leftFix->isChecked() || ui->rightFix->isChecked()))
+        {
+            ui->errorWarning->setVisible(true);
+            ui->errorWarning->setText( "<html><head/><body><p><span style=\"\
+                                           font-weight:600; color:#e20000;\">ОШИБКА! Мгновенный механизм!\
+                                           </span></p></body></html>");
+            return false;
+        }
+
         if(i)
         {
             QTableWidgetItem* tempEndPrev = ui->barsTable->item(i-1, 1);
@@ -252,7 +279,7 @@ bool MainWindow::check()
 
     }
 
-    if(!begins.count(1) || !ends.count(ui->nodesTable->rowCount()))
+    if((!begins.count(1) || !ends.count(ui->nodesTable->rowCount())) && ui->nodesTable->rowCount())
     {
         ui->errorWarning->setVisible(true);
         ui->errorWarning->setText( "<html><head/><body><p><span style=\"\
