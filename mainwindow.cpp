@@ -619,8 +619,12 @@ void MainWindow::on_leftFix_stateChanged(int arg1)
 
 void MainWindow::on_actionSave_triggered()
 {
-    std::string fileName = QFileDialog::getSaveFileName(0, QString("Сохранить проект"),
-                                                        QString(""), QString("*.ban")).toStdString();
+    QString qFileName = QFileDialog::getSaveFileName(0, QString("Сохранить проект"),
+                                                        QString(""),
+                                                     QString("*.ban"));
+    if(!qFileName.endsWith(".ban"))
+        qFileName+=".ban";
+    std::string fileName = qFileName.toStdString();
     saveProj(ui->nodesTable, ui->barsTable, ui->leftFix, ui->rightFix, fileName);
 }
 
