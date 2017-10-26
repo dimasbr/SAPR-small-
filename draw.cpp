@@ -42,6 +42,8 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
     unsigned int hep = graphVW->viewport()->height();
 
     QPen standartPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap);
+    QPen nFPen(Qt::blue, 4, Qt::SolidLine, Qt::RoundCap);
+    QPen bFPen(Qt::black, 4, Qt::SolidLine, Qt::RoundCap);
     graphVW->scene()->addLine(0, 0, wep, 0, standartPen);
     graphVW->scene()->addLine(wep, 0, wep-10, 10, standartPen);
     graphVW->scene()->addLine(wep, 0, wep-10, -10, standartPen);
@@ -72,6 +74,16 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
         tempText->setPos(tempCoord+8, 0);
         graphVW->scene()->addEllipse(tempCoord+8, 5, 15, 15, standartPen);
         nodesCoordsOnScreen.push_back(tempCoord);
+
+        if(nodesForces.at(i))
+        {
+            graphVW->scene()->addLine(tempCoord, 0, tempCoord+50, 0, nFPen);
+            int tempMinus;
+            if(nodesForces.at(i)>=0) tempMinus=1;
+            else tempMinus=-1;
+            graphVW->scene()->addLine(tempCoord+50, 0, tempCoord+50-10*tempMinus, 10, nFPen);
+            graphVW->scene()->addLine(tempCoord+50, 0, tempCoord+50-10*tempMinus, -10, nFPen);
+        }
     }
 
 
@@ -100,7 +112,31 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
         unsigned int endCrd = nodesCoordsOnScreen.at(end-1);
         graphVW->scene()->addRect(begCrd+4, (barsAreas.at(i)/2)*perOneMmV, endCrd-begCrd,
                                   -(barsAreas.at(i))*perOneMmV, standartPen);
+        QGraphicsTextItem* tempText = graphVW->scene()->addText(QString::number(i+1));
+        tempText->setPos(begCrd + (endCrd-begCrd)/2, 20);
+        graphVW->scene()->addRect(begCrd + (endCrd-begCrd)/2, 43, 20, -20, standartPen);
+
+        if(barsFrc.at(i))
+        {
+
+            for(int k=begCrd; k<endCrd-6; k+=5)
+            {
+                graphVW->scene()->addLine(begCrd+k, 0, begCrd+k+5, 0);
+                if(barsFrc.at(i)>=0)
+                {
+                graphVW->scene()->addLine(begCrd+k+5, 0, begCrd+k+3, 2, bFPen);
+                graphVW->scene()->addLine(begCrd+k+5, 0, begCrd+k+3, -2, bFPen);
+                }
+                else
+                {
+                    graphVW->scene()->addLine(begCrd+k, 0, begCrd+k+2, 2, bFPen);
+                    graphVW->scene()->addLine(begCrd+k, 0, begCrd+k+2, -2, bFPen);
+                }
+            }
+        }
     }
+
+
 
 
 
@@ -123,6 +159,11 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
                                       (-barsAreas.at(barsAreas.size()-1)/2)*perOneMmV+i+20);
         }
     }
+
+    //graphVW->scene()->invalidate(0, difY*perOneMmV/2+spaceV, difX+2*spaceH, -difY*perOneMmV+spaceV*2);
+    //graphVW->scene()->invalidate(graphVW->scene()->itemsBoundingRect());
+    graphVW->scene()->update();
+    //graphVW->scene()->invalidate(0, difY*perOneMmV/2+spaceV, difX*perOneMmH+2*spaceH, -difY*perOneMmV+spaceV*2);
 
 
     //unsigned int wec = (int)( (float)difX / 0.9 );

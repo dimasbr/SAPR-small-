@@ -570,6 +570,8 @@ void MainWindow::on_verticalSlider_valueChanged(int value)
 {
     ui->renderArea->resetMatrix();
     ui->renderArea->scale(value, value);
+    draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
+//    ui->renderArea->update();
 }
 
 void MainWindow::on_rightFix_stateChanged(int arg1)
