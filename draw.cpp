@@ -77,12 +77,12 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
 
         if(nodesForces.at(i))
         {
-            graphVW->scene()->addLine(tempCoord, 0, tempCoord+50, 0, nFPen);
             int tempMinus;
             if(nodesForces.at(i)>=0) tempMinus=1;
             else tempMinus=-1;
-            graphVW->scene()->addLine(tempCoord+50, 0, tempCoord+50-10*tempMinus, 10, nFPen);
-            graphVW->scene()->addLine(tempCoord+50, 0, tempCoord+50-10*tempMinus, -10, nFPen);
+            graphVW->scene()->addLine(tempCoord, 0, (int)tempCoord+50*tempMinus, 0, nFPen);
+            graphVW->scene()->addLine((int)tempCoord+50*tempMinus, 0, (int)tempCoord+50*tempMinus-10*tempMinus, 10, nFPen);
+            graphVW->scene()->addLine((int)tempCoord+50*tempMinus, 0, (int)tempCoord+50*tempMinus-10*tempMinus, -10, nFPen);
         }
     }
 
@@ -156,7 +156,7 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
             graphVW->scene()->addLine(nodesCoordsOnScreen.at(barsCoords.at(barsCoords.size()-1).second-1)+2,
                                       (-barsAreas.at(barsAreas.size()-1)/2)*perOneMmV+i,
                                       nodesCoordsOnScreen.at(barsCoords.at(barsCoords.size()-1).second-1)+22,
-                                      (-barsAreas.at(barsAreas.size()-1)/2)*perOneMmV+i+20);
+                                      (-barsAreas.at(barsAreas.size()-1)/2)*perOneMmV+i-20);
         }
     }
 

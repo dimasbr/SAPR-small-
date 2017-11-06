@@ -167,21 +167,21 @@ bool MainWindow::check()
 
     sortBars();
 
-    if(ui->leftFix->isChecked())
-    {
-        if(ui->nodesTable->rowCount() && ui->nodesTable->item(0,1)->text().toDouble()<0)
-        {
-            ui->nodesTable->item(0, 1)->setText(QString::number(-(ui->nodesTable->item(0,1)->text().toDouble())));
-        }
-    }
-    if(ui->rightFix->isChecked())
-    {
-        int tempSize = ui->nodesTable->rowCount();
-        if(tempSize && ui->nodesTable->item(tempSize-1,1)->text().toDouble()>0)
-        {
-            ui->nodesTable->item(tempSize-1, 1)->setText(QString::number(-(ui->nodesTable->item(tempSize-1,1)->text().toDouble())));
-        }
-    }
+//    if(ui->leftFix->isChecked())
+//    {
+//        if(ui->nodesTable->rowCount() && ui->nodesTable->item(0,1)->text().toDouble()<0)
+//        {
+//            ui->nodesTable->item(0, 1)->setText(QString::number(-(ui->nodesTable->item(0,1)->text().toDouble())));
+//        }
+//    }
+//    if(ui->rightFix->isChecked())
+//    {
+//        int tempSize = ui->nodesTable->rowCount();
+//        if(tempSize && ui->nodesTable->item(tempSize-1,1)->text().toDouble()>0)
+//        {
+//            ui->nodesTable->item(tempSize-1, 1)->setText(QString::number(-(ui->nodesTable->item(tempSize-1,1)->text().toDouble())));
+//        }
+//    }
 
 
 
