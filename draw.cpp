@@ -68,7 +68,7 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
     std::vector<unsigned int> nodesCoordsOnScreen;
     for(int i=0; i<nodesCoords.size(); i++)
     {
-        unsigned int tempCoord = spaceH+nodesCoords.at(i)*perOneMmH;
+        unsigned int tempCoord = spaceH+(nodesCoords.at(i)-nodesCoords.at(0))*perOneMmH;
         graphVW->scene()->addEllipse(tempCoord, -4, 8, 8, standartPen);
         QGraphicsTextItem* tempText = graphVW->scene()->addText(QString::number(i+1));
         tempText->setPos(tempCoord+8, 0);
@@ -144,8 +144,8 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
     {
         for (int i=0; i < barsAreas.at(0)*perOneMmV-19; i=i+20)
         {
-            graphVW->scene()->addLine(nodesCoordsOnScreen.at(0)+2, (-barsAreas.at(0)/2)*perOneMmV+i,
-                                      nodesCoordsOnScreen.at(0)-18, (-barsAreas.at(0)/2)*perOneMmV+i+20);
+            graphVW->scene()->addLine(spaceH+2, (-barsAreas.at(0)/2)*perOneMmV+i,
+                                     spaceH-18, (-barsAreas.at(0)/2)*perOneMmV+i+20);
         }
     }
 

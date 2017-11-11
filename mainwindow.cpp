@@ -206,6 +206,24 @@ bool MainWindow::check()
             tmpEnd = tempBuffer;
         }
 
+        if (tmpBeg > ui->nodesTable->rowCount())
+        {
+            if(ui->nodesTable->rowCount())
+            {
+               tmpBeg = ui->nodesTable->rowCount()-1;
+               tempBegin->setText(QString::number(tmpBeg));
+            }
+        }
+
+        if (tmpEnd > ui->nodesTable->rowCount())
+        {
+            if(ui->nodesTable->rowCount())
+            {
+               tmpEnd = ui->nodesTable->rowCount()-1;
+               tempEnd->setText(QString::number(tmpEnd));
+            }
+        }
+
         if(tmpBeg != (tmpEnd-1))
         {
             if(tmpEnd < ui->nodesTable->rowCount())
@@ -313,23 +331,23 @@ void MainWindow::on_deleteNode_clicked()
 {
     ui->nodesTable->removeRow(ui->nodesTable->currentRow());
 
-    unsigned int temp;
-    for (int i=0; i < ui->barsTable->rowCount(); i++)
-    {
-        temp = ui->barsTable->item(i, 0)->text().toUInt();
-        if (temp > ui->nodesTable->rowCount())
-        {
-            ui->barsTable->item(i, 0)->setText(QString::number(ui->nodesTable->rowCount()));
-        }
+//    unsigned int temp;
+//    for (int i=0; i < ui->barsTable->rowCount(); i++)
+//    {
+//        temp = ui->barsTable->item(i, 0)->text().toUInt();
+//        if (temp > ui->nodesTable->rowCount())
+//        {
+//            ui->barsTable->item(i, 0)->setText(QString::number(ui->nodesTable->rowCount()));
+//        }
 
-        temp = ui->barsTable->item(i, 1)->text().toUInt();
-        if (temp > ui->nodesTable->rowCount())
-        {
-            int blabla=ui->nodesTable->rowCount();
-            QTableWidgetItem* bla = ui->barsTable->item(i, 1);
-            /*ui->barsTable->item(i, 1)*/bla->setText(QString::number(ui->nodesTable->rowCount()));
-        }
-    }
+//        temp = ui->barsTable->item(i, 1)->text().toUInt();
+//        if (temp > ui->nodesTable->rowCount())
+//        {
+//            int blabla=ui->nodesTable->rowCount();
+//            QTableWidgetItem* bla = ui->barsTable->item(i, 1);
+//            /*ui->barsTable->item(i, 1)*/bla->setText(QString::number(ui->nodesTable->rowCount()));
+//        }
+//    }
     if (check())
     {
         draw(ui->nodesTable, ui->barsTable, ui->renderArea, ui->leftFix, ui->rightFix);
@@ -639,6 +657,7 @@ void MainWindow::on_actionLoad_triggered()
 {
     std::string fileName = QFileDialog::getOpenFileName(0, QString("Открыть проект"),
                                                         QString(""), QString("*.ban")).toStdString();
+    if(fileName == "") return;
     loadProj(ui->nodesTable, ui->barsTable, ui->leftFix, ui->rightFix, fileName);
 }
 
