@@ -2,7 +2,7 @@
 #define POSTPROCESSOR_H
 
 #include <QWidget>
-//#include <QMainWindow>
+#include <QGraphicsScene>
 #include <QTableWidget>
 #include "processor.h"
 #include <QCheckBox>
@@ -28,9 +28,20 @@ public:
 
 private slots:
     void makeTable();
+    void drawEpures();
+
+    void on_addScale_clicked();
+
+    void on_removeScale_clicked();
+
+    void on_closeButton_clicked();
+
+    void on_lineEdit_textEdited(const QString &arg1);
 
 private:
     Ui::Postprocessor *ui;
+    QGraphicsScene scene;
+    int scale;
 };
 
 #endif // POSTPROCESSOR_H

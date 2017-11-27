@@ -19,17 +19,17 @@ std::vector<double> solveSystem (std::vector<std::vector<double> > a, std::vecto
 
 double upx (double x, unsigned int l, double up0, double upl, double q, double e, double a);
 
-std::vector<std::pair<unsigned int, double> > makeCoordsUx (std::vector<double> delta,
+std::vector<std::pair<double, double> > makeCoordsUx (std::vector<double> delta,
                                                             QTableWidget* bars, QTableWidget*nodes);
 
 double npx (double x, double e, double a, unsigned int l, double up0, double upl, double q);
 
-std::vector<std::pair<unsigned int, double> > makeCoordsNx (std::vector<double> delta,
+std::vector<std::pair<double, double> > makeCoordsNx (std::vector<double> delta,
                                                             QTableWidget* bars, QTableWidget*nodes);
 
 double sigmax (double n, double a);
 
-std::vector<std::pair<unsigned int, double> > makeCoordsSigmax (std::vector<std::pair<unsigned int, double> > n,
-                                                                QTableWidget* bars);
+std::vector<std::pair<double, double> > makeCoordsSigmax (std::vector<std::pair<double, double> > n,
+                                                                QTableWidget* bars, QTableWidget* nodes);
 
 #endif // PROCESSOR_H

@@ -142,11 +142,11 @@ double upx (double x, unsigned int l, double up0, double upl, double q, double e
     return (1-x/l)*up0 + (x/l)*upl + (q*l*l)/(2*e*a) * x/l * (1-x/l);
 }
 
-std::vector<std::pair<unsigned int, double> > makeCoordsUx (std::vector<double> delta,
+std::vector<std::pair<double, double> > makeCoordsUx (std::vector<double> delta,
                                                             QTableWidget* bars, QTableWidget*nodes)
 {
-    std::vector<std::pair<unsigned int, double> > res;
-    std::pair <unsigned int, double> temp;
+    std::vector<std::pair<double, double> > res;
+    std::pair <double, double> temp;
 
     unsigned int l;
     double up0;
@@ -163,13 +163,24 @@ std::vector<std::pair<unsigned int, double> > makeCoordsUx (std::vector<double> 
         e = bars->item(i, 3)->text().toDouble();
         a = bars->item(i, 2)->text().toDouble();
         l = getLength(i+1, bars, nodes);
-        temp.first = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toUInt();
-        temp.second = upx(0, l, up0, upl, q, e, a);
-        res.push_back(temp);
 
-        temp.first = nodes->item(bars->item(i, 1)->text().toInt()-1, 0)->text().toUInt();
+        for(double x = 0; x < l; x+=0.1)
+        {
+            temp.first = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toDouble() + x;
+            temp.second = upx(x, l, up0, upl, q, e, a);
+            res.push_back(temp);
+        }
+        temp.first = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toDouble() + l;
         temp.second = upx(l, l, up0, upl, q, e, a);
         res.push_back(temp);
+
+//        temp.first = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toUInt();
+//        temp.second = upx(0, l, up0, upl, q, e, a);
+//        res.push_back(temp);
+
+//        temp.first = nodes->item(bars->item(i, 1)->text().toInt()-1, 0)->text().toUInt();
+//        temp.second = upx(l, l, up0, upl, q, e, a);
+//        res.push_back(temp);
     }
 
     return res;
@@ -180,11 +191,11 @@ double npx (double x, double e, double a, unsigned int l, double up0, double upl
     return (e*a)/l * (upl-up0) + (q*l)/2 * (1 - (2*x)/l);
 }
 
-std::vector<std::pair<unsigned int, double> > makeCoordsNx (std::vector<double> delta,
+std::vector<std::pair<double, double> > makeCoordsNx (std::vector<double> delta,
                                                             QTableWidget* bars, QTableWidget*nodes)
 {
-    std::vector<std::pair<unsigned int, double> > res;
-    std::pair <unsigned int, double> temp;
+    std::vector<std::pair<double, double> > res;
+    std::pair <double, double> temp;
 
     unsigned int l;
     double up0;
@@ -201,13 +212,24 @@ std::vector<std::pair<unsigned int, double> > makeCoordsNx (std::vector<double> 
         e = bars->item(i, 3)->text().toDouble();
         a = bars->item(i, 2)->text().toDouble();
         l = getLength(i+1, bars, nodes);
-        temp.first = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toUInt();
-        temp.second = npx(0, e, a, l, up0, upl, q);
-        res.push_back(temp);
 
-        temp.first = nodes->item(bars->item(i, 1)->text().toInt()-1, 0)->text().toUInt();
+        for(double x = 0; x < l; x+=0.1)
+        {
+            temp.first = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toDouble() + x;
+            temp.second = npx(x, e, a, l, up0, upl, q);
+            res.push_back(temp);
+        }
+        temp.first = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toDouble() + l;
         temp.second = npx(l, e, a, l, up0, upl, q);
         res.push_back(temp);
+
+//        temp.first = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toUInt();
+//        temp.second = npx(0, e, a, l, up0, upl, q);
+//        res.push_back(temp);
+
+//        temp.first = nodes->item(bars->item(i, 1)->text().toInt()-1, 0)->text().toUInt();
+//        temp.second = npx(l, e, a, l, up0, upl, q);
+//        res.push_back(temp);
     }
 
     return res;
@@ -219,19 +241,31 @@ double sigmax (double n, double a)
 }
 
 
-std::vector<std::pair<unsigned int, double> > makeCoordsSigmax (std::vector<std::pair<unsigned int, double> > n,
-                                                                QTableWidget* bars)
+std::vector<std::pair<double, double> > makeCoordsSigmax (std::vector<std::pair<double, double> > n,
+                                                                QTableWidget* bars, QTableWidget* nodes)
 {
-    std::vector<std::pair<unsigned int, double> > res;
-    std::pair<unsigned int, double> temp;
+    std::vector<std::pair<double, double> > res;
+    std::pair<double, double> temp;
 
-    for (unsigned int i = 0; i < n.size(); i+=2)
+//    unsigned int l;
+    double a;
+    unsigned int barTemp;
+    unsigned int tempCoord;
+
+    for (unsigned int i = 0; i < n.size(); i++)
     {
+        for(unsigned int x = 0; x < nodes->rowCount(); x++)
+        {
+            tempCoord = nodes->item(x, 0)->text().toUInt();
+            if(n.at(i).first >= tempCoord)
+            {
+                barTemp = getBarBeginsIn(x+1, bars);
+                break;
+            }
+        }
+        a = bars->item(barTemp-1, 2)->text().toDouble();
         temp.first = n.at(i).first;
-        temp.second = (n.at(i).second/bars->item(i/2, 2)->text().toDouble());
-        res.push_back(temp);
-        temp.first = n.at(i+1).first;
-        temp.second = (n.at(i+1).second/bars->item(i/2, 2)->text().toDouble());
+        temp.second = sigmax(n.at(i).second, a);
         res.push_back(temp);
     }
 
