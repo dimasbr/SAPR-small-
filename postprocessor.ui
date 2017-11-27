@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Postprocessor</class>
+ <widget class="QWidget" name="Postprocessor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>536</width>
+    <height>406</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="graphTab">
+      <attribute name="title">
+       <string>Эпюры</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QGraphicsView" name="graphicsView"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tableTab">
+      <attribute name="title">
+       <string>Табличные данные</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QTableWidget" name="dataTable">
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>100</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Координата</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Nx</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Ux</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>σx</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Max σx</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="anyPointTab">
+      <attribute name="title">
+       <string>В произвольном сечении</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

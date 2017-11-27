@@ -15,10 +15,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     draw.cpp \
-    saveload.cpp
+    saveload.cpp \
+    processor.cpp \
+    postprocessor.cpp
 
 HEADERS  += mainwindow.h \
     draw.h \
-    saveload.h
+    saveload.h \
+    processor.h \
+    postprocessor.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    postprocessor.ui

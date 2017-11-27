@@ -667,3 +667,12 @@ void MainWindow::on_actionHelp_triggered()
     helpText.setText("<html><head/><body><p>Программа написана.</p></body></html>");
     helpText.exec();
 }
+
+void MainWindow::on_processor_clicked()
+{
+    if (ui->nodesTable->rowCount() < 2 || ui->barsTable->rowCount() < 1 || !check()) return;
+
+    postprocessor = new Postprocessor(this, ui->barsTable, ui->nodesTable,
+                                      ui->leftFix, ui->rightFix);
+    postprocessor->show();
+}

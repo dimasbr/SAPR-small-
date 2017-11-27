@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include "draw.h"
 #include "saveload.h"
+#include "postprocessor.h"
 
 namespace Ui {
 class MainWindow;
@@ -57,9 +58,12 @@ private slots:
 
     void on_actionHelp_triggered();
 
+    void on_processor_clicked();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene scene;
+    Postprocessor* postprocessor;
 };
 
 #endif // MAINWINDOW_H
