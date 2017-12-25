@@ -1,12 +1,12 @@
 #include "processor.h"
 
-unsigned int getLength(unsigned int bar, QTableWidget* bars, QTableWidget*nodes)
+double getLength(unsigned int bar, QTableWidget* bars, QTableWidget*nodes)
 {
     unsigned int begin = bars->item(bar-1, 0)->text().toUInt();
     unsigned int end = bars->item(bar-1, 1)->text().toUInt();
 
-    unsigned int coordBegin = nodes->item(begin-1, 0)->text().toUInt();
-    unsigned int coordEnd = nodes->item(end-1, 0)->text().toUInt();
+    double coordBegin = nodes->item(begin-1, 0)->text().toDouble();
+    double coordEnd = nodes->item(end-1, 0)->text().toDouble();
 
     return coordEnd-coordBegin;
 }
@@ -40,8 +40,8 @@ std::vector<double> makeBVector(QTableWidget* bars, QTableWidget*nodes, QCheckBo
         double q0 = bars->item(bar0-1, 5)->text().toDouble();
         double qL = bars->item(barL-1, 5)->text().toDouble();
 
-        unsigned int  l0 = getLength(bar0, bars, nodes);
-        unsigned int  lL = getLength(barL, bars, nodes);
+        double  l0 = getLength(bar0, bars, nodes);
+        double  lL = getLength(barL, bars, nodes);
 
         double force = nodes->item(i, 1)->text().toDouble();
 
@@ -52,7 +52,7 @@ std::vector<double> makeBVector(QTableWidget* bars, QTableWidget*nodes, QCheckBo
     else
     {
         double q = bars->item(0, 5)->text().toDouble();
-        unsigned int l = getLength(1, bars, nodes);
+        double l = getLength(1, bars, nodes);
         double force = nodes->item(0, 1)->text().toDouble();
         res.at(0) = force + (q/2)*l;
     }
@@ -60,7 +60,7 @@ std::vector<double> makeBVector(QTableWidget* bars, QTableWidget*nodes, QCheckBo
     else
     {
         double q = bars->item(bars->rowCount()-1, 5)->text().toDouble();
-        unsigned int l = getLength(bars->rowCount(), bars, nodes);
+        double l = getLength(bars->rowCount(), bars, nodes);
         double force = nodes->item(nodes->rowCount()-1, 1)->text().toDouble();
         res.at(res.size()-1) = force + (q/2)*l;
     }
@@ -75,7 +75,7 @@ std::vector<std::vector<double> > makeAMatrix(QTableWidget* bars, QTableWidget* 
     for(unsigned int i=0; i<bars->rowCount(); i++)
     {
         double e = bars->item(i, 3)->text().toDouble();
-        unsigned int l = getLength(i+1, bars, nodes);
+        double l = getLength(i+1, bars, nodes);
         double a = bars->item(i, 2)->text().toDouble();
 
         double element = e*a/l;
@@ -137,7 +137,7 @@ std::vector<double> solveSystem (std::vector<std::vector<double> > a, std::vecto
     return b;
 }
 
-double upx (double x, unsigned int l, double up0, double upl, double q, double e, double a)
+double upx (double x, double l, double up0, double upl, double q, double e, double a)
 {
     return (1-x/l)*up0 + (x/l)*upl + (q*l*l)/(2*e*a) * x/l * (1-x/l);
 }
@@ -148,7 +148,7 @@ std::vector<std::pair<double, double> > makeCoordsUx (std::vector<double> delta,
     std::vector<std::pair<double, double> > res;
     std::pair <double, double> temp;
 
-    unsigned int l;
+    double l;
     double up0;
     double upl;
     double q;
@@ -186,7 +186,7 @@ std::vector<std::pair<double, double> > makeCoordsUx (std::vector<double> delta,
     return res;
 }
 
-double npx (double x, double e, double a, unsigned int l, double up0, double upl, double q)
+double npx (double x, double e, double a, double l, double up0, double upl, double q)
 {
     return (e*a)/l * (upl-up0) + (q*l)/2 * (1 - (2*x)/l);
 }
@@ -197,7 +197,7 @@ std::vector<std::pair<double, double> > makeCoordsNx (std::vector<double> delta,
     std::vector<std::pair<double, double> > res;
     std::pair <double, double> temp;
 
-    unsigned int l;
+    double l;
     double up0;
     double upl;
     double q;
@@ -250,13 +250,13 @@ std::vector<std::pair<double, double> > makeCoordsSigmax (std::vector<std::pair<
 //    unsigned int l;
     double a;
     unsigned int barTemp;
-    unsigned int tempCoord;
+    double tempCoord;
 
     for (unsigned int i = 0; i < n.size(); i++)
     {
         for(unsigned int x = 0; x < nodes->rowCount(); x++)
         {
-            tempCoord = nodes->item(x, 0)->text().toUInt();
+            tempCoord = nodes->item(x, 0)->text().toDouble();
             if(n.at(i).first >= tempCoord)
             {
                 barTemp = getBarBeginsIn(x+1, bars);

@@ -4,7 +4,7 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
 {
     graphVW->scene()->clear();
 
-    std::vector<unsigned int> nodesCoords;
+    std::vector<double> nodesCoords;
     std::vector<double> nodesForces;
 
     std::vector<std::pair<unsigned int, unsigned int> > barsCoords;
@@ -15,7 +15,7 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
 
     for (int i = 0; i < nodes->rowCount(); i++)
     {
-        nodesCoords.push_back(nodes->item(i, 0)->text().toUInt());
+        nodesCoords.push_back(nodes->item(i, 0)->text().toDouble());
         nodesForces.push_back(nodes->item(i, 1)->text().toDouble());
     }
 
@@ -51,7 +51,7 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
     if(!nodes->rowCount()) return;
     difX = nodesCoords[nodesCoords.size()-1] - nodesCoords[0];
 
-    unsigned int perOneMmH;
+    double perOneMmH;                       //Возможно, стоит оставить unsigned int
     if(difX)
     {
         perOneMmH = (wep - 2*spaceH)/difX;
@@ -65,10 +65,10 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
         perOneMmH++;
     }
 
-    std::vector<unsigned int> nodesCoordsOnScreen;
+    std::vector<double> nodesCoordsOnScreen;             //Тут тоже
     for(int i=0; i<nodesCoords.size(); i++)
     {
-        unsigned int tempCoord = spaceH+(nodesCoords.at(i)-nodesCoords.at(0))*perOneMmH;
+        double tempCoord = spaceH+(nodesCoords.at(i)-nodesCoords.at(0))*perOneMmH;
         graphVW->scene()->addEllipse(tempCoord, -4, 8, 8, standartPen);
         QGraphicsTextItem* tempText = graphVW->scene()->addText(QString::number(i+1));
         tempText->setPos(tempCoord+8, 0);
@@ -80,9 +80,9 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
             int tempMinus;
             if(nodesForces.at(i)>=0) tempMinus=1;
             else tempMinus=-1;
-            graphVW->scene()->addLine(tempCoord, 0, (int)tempCoord+50*tempMinus, 0, nFPen);
-            graphVW->scene()->addLine((int)tempCoord+50*tempMinus, 0, (int)tempCoord+50*tempMinus-10*tempMinus, 10, nFPen);
-            graphVW->scene()->addLine((int)tempCoord+50*tempMinus, 0, (int)tempCoord+50*tempMinus-10*tempMinus, -10, nFPen);
+            graphVW->scene()->addLine(tempCoord, 0, /*(int)*/tempCoord+50*tempMinus, 0, nFPen);
+            graphVW->scene()->addLine(/*(int)*/tempCoord+50*tempMinus, 0, /*(int)*/tempCoord+50*tempMinus-10*tempMinus, 10, nFPen);
+            graphVW->scene()->addLine(/*(int)*/tempCoord+50*tempMinus, 0, /*(int)*/tempCoord+50*tempMinus-10*tempMinus, -10, nFPen);
         }
     }
 
@@ -90,7 +90,7 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
     if(!bars->rowCount()) return;
     difY = (*(std::max_element(barsAreas.begin(), barsAreas.end()))) ;
 
-    unsigned int perOneMmV;
+    double perOneMmV;                 //И тут
     if(difY)
     {
         perOneMmV = (hep - 2*spaceV)/difY;
@@ -108,8 +108,8 @@ void draw(QTableWidget* nodes, QTableWidget* bars, QGraphicsView* graphVW, QChec
     {
         unsigned int begin = barsCoords.at(i).first;
         unsigned int end = barsCoords.at(i).second;
-        unsigned int begCrd = nodesCoordsOnScreen.at(begin-1);
-        unsigned int endCrd = nodesCoordsOnScreen.at(end-1);
+        double begCrd = nodesCoordsOnScreen.at(begin-1);
+        double endCrd = nodesCoordsOnScreen.at(end-1);
         graphVW->scene()->addRect(begCrd+4, (barsAreas.at(i)/2)*perOneMmV, endCrd-begCrd,
                                   -(barsAreas.at(i))*perOneMmV, standartPen);
         QGraphicsTextItem* tempText = graphVW->scene()->addText(QString::number(i+1));

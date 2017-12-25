@@ -94,7 +94,7 @@ void MainWindow::sortNodes()
     {
         j=i;
 
-        while ((j>0) && (ui->nodesTable->item(j-1, 0)->text().toUInt() > ui->nodesTable->item(j, 0)->text().toUInt()  ))
+        while ((j>0) && (ui->nodesTable->item(j-1, 0)->text().toDouble() > ui->nodesTable->item(j, 0)->text().toDouble()  ))
         {
             swapNodes(j, j-1);
             j--;
@@ -129,14 +129,14 @@ bool MainWindow::check()
 
 
     QTableWidgetItem* temp;
-    std::set<unsigned int> coords;
+    std::set<double> coords;
     for (int i=0; i < ui->nodesTable->rowCount(); i++)
     {
         temp = ui->nodesTable->item(i, 0);
         if(!temp) return false;
         else
         {
-            unsigned int k = temp->text().toUInt();
+            double k = temp->text().toDouble();
             if (coords.count(k))
             {
                 ui->errorWarning->setVisible(true);
@@ -147,6 +147,9 @@ bool MainWindow::check()
             }
             else coords.insert(k);
         }
+
+        if(temp->text().toDouble() < 0) temp->setText(QString::number( - temp->text().toDouble()));
+
         temp = ui->nodesTable->item(i, 1);
         if(!temp) return false;
     }
@@ -186,22 +189,22 @@ bool MainWindow::check()
 
 
 
-    std::set<unsigned int> begins;
-    std::set<unsigned int> ends;
+    std::set<double> begins;
+    std::set<double> ends;
     for (int i=0; i < ui->barsTable->rowCount(); i++)
     {
         QTableWidgetItem* tempBegin = ui->barsTable->item(i, 0);
         QTableWidgetItem* tempEnd = ui->barsTable->item(i, 1);
 
-        unsigned int tmpBeg = tempBegin->text().toUInt();
-        unsigned int tmpEnd = tempEnd->text().toUInt();
+        double tmpBeg = tempBegin->text().toDouble();
+        double tmpEnd = tempEnd->text().toDouble();
 
         if(tmpBeg > tmpEnd)
         {
             tempBegin->setText(QString::number(tmpEnd));
             tempEnd->setText(QString::number(tmpBeg));
 
-            unsigned int tempBuffer = tmpBeg;
+            double tempBuffer = tmpBeg;
             tmpBeg = tmpEnd;
             tmpEnd = tempBuffer;
         }
@@ -284,7 +287,7 @@ bool MainWindow::check()
         if(i)
         {
             QTableWidgetItem* tempEndPrev = ui->barsTable->item(i-1, 1);
-            unsigned int tmpEndPrev = tempEndPrev->text().toUInt();
+            double tmpEndPrev = tempEndPrev->text().toDouble();
             if(tmpBeg!=tmpEndPrev)
             {
                 ui->errorWarning->setVisible(true);
@@ -476,10 +479,10 @@ void MainWindow::on_nodesTable_cellChanged(int row, int column)
 {
     if (column==0)
     {
-       unsigned int temp=0;
+       double temp=0;
        try
        {
-           temp=ui->nodesTable->item(row, column)->text().toUInt();
+           temp=ui->nodesTable->item(row, column)->text().toDouble();
        }
        catch(...)
        {

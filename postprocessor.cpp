@@ -45,7 +45,7 @@ void Postprocessor::makeTable()
     std::vector<double> vectorB = makeBVector(bars, nodes, left, right);
     std::vector<double> delta = solveSystem(matrixA, vectorB);
 
-    unsigned int l;
+    double l;
     double q;
     double e;
     double a;
@@ -56,7 +56,7 @@ void Postprocessor::makeTable()
     double n;
     double sigma;
     double maxSigma;
-    unsigned int coordBeg;
+    double coordBeg;
     //unsigned int coordEnd;
 
     for(unsigned int i = 0; i < bars->rowCount(); i++)
@@ -68,7 +68,7 @@ void Postprocessor::makeTable()
         up0 = delta.at(i);
         upl = delta.at(i+1);
         maxSigma = bars->item(i, 4)->text().toDouble();
-        coordBeg = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toUInt();
+        coordBeg = nodes->item(bars->item(i, 0)->text().toInt()-1, 0)->text().toDouble();
         //coordEnd = nodes->item(bars->item(i, 1)->text().toInt()-1, 0)->text().toUInt();
 
         for(double x = 0; x < l; x+=( (double)l )/10)
@@ -98,7 +98,7 @@ void Postprocessor::makeTable()
             ui->dataTable->item(ui->dataTable->rowCount()-1, 3)->setText(QString::number(sigma));
             ui->dataTable->item(ui->dataTable->rowCount()-1, 4)->setText(QString::number(maxSigma));
 
-            if(sigma >= maxSigma)
+            if(sigma >= maxSigma || sigma <= -maxSigma)
             {
                 ui->dataTable->item(ui->dataTable->rowCount()-1, 1)->setBackgroundColor(Qt::red);
                 ui->dataTable->item(ui->dataTable->rowCount()-1, 2)->setBackgroundColor(Qt::red);
@@ -199,7 +199,7 @@ void Postprocessor::on_lineEdit_textEdited(const QString &arg1)
     std::vector<double> vectorB = makeBVector(bars, nodes, left, right);
     std::vector<double> delta = solveSystem(matrixA, vectorB);
 
-    unsigned int l;
+    double l;
     double q;
     double e;
     double a;
@@ -213,7 +213,7 @@ void Postprocessor::on_lineEdit_textEdited(const QString &arg1)
 //    unsigned int coordBeg;
     double searchPoint;
 
-    unsigned int tempCoord;
+    double tempCoord;
     try
     {
         searchPoint = ui->lineEdit->text().toDouble();
@@ -223,21 +223,37 @@ void Postprocessor::on_lineEdit_textEdited(const QString &arg1)
         ui->lineEdit->setText("0");
     }
 
+    ui->pointResults->item(0, 0)->setBackground(Qt::white);
+    ui->pointResults->item(0, 1)->setBackground(Qt::white);
+    ui->pointResults->item(0, 2)->setBackground(Qt::white);
+    ui->pointResults->item(0, 3)->setBackground(Qt::white);
+
     unsigned int barTemp;
 
     if (searchPoint < nodes->item(0, 0)->text().toDouble() ||
             searchPoint > nodes->item(nodes->rowCount()-1, 0)->text().toDouble())
         return;
 
-    for(unsigned int x = 0; x < nodes->rowCount(); x++)
+//    for(unsigned int x = 0; x < nodes->rowCount(); x++)
+//    {
+//        tempCoord = nodes->item(x, 0)->text().toUInt();
+//        if(searchPoint >= tempCoord)
+//        {
+//            barTemp = getBarBeginsIn(x+1, bars);
+//            break;
+//        }
+//    }
+
+    unsigned int x = 1;
+    tempCoord = nodes->item(x, 0)->text().toDouble();
+
+    while(tempCoord<searchPoint)
     {
-        tempCoord = nodes->item(x, 0)->text().toUInt();
-        if(searchPoint >= tempCoord)
-        {
-            barTemp = getBarBeginsIn(x+1, bars);
-            break;
-        }
+        x++;
+        tempCoord = nodes->item(x, 0)->text().toDouble();
     }
+    barTemp = getBarEndsIn(x+1, bars);
+    tempCoord = nodes->item(bars->item(barTemp-1, 0)->text().toInt()-1, 0)->text().toDouble();
 
     l = getLength(barTemp, bars, nodes);
     q = bars->item(barTemp-1, 5)->text().toDouble();
@@ -258,7 +274,7 @@ void Postprocessor::on_lineEdit_textEdited(const QString &arg1)
     ui->pointResults->item(0, 2)->setText(QString::number(sigma));
     ui->pointResults->item(0, 3)->setText(QString::number(maxSigma));
 
-    if(sigma >= maxSigma)
+    if(sigma >= maxSigma || sigma <= -maxSigma)
     {
         ui->pointResults->item(0, 0)->setBackground(Qt::red);
         ui->pointResults->item(0, 1)->setBackground(Qt::red);

@@ -344,7 +344,7 @@
       <item>
        <widget class="QPushButton" name="processor">
         <property name="text">
-         <string>Расчитать</string>
+         <string>Расcчитать</string>
         </property>
        </widget>
       </item>

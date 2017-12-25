@@ -5,7 +5,7 @@
 #include <QCheckBox>
 #include <vector>
 
-unsigned int getLength(unsigned int bar, QTableWidget* bars, QTableWidget* nodes);
+double getLength(unsigned int bar, QTableWidget* bars, QTableWidget* nodes);
 
 unsigned int getBarBeginsIn(unsigned int node, QTableWidget*bars);
 
@@ -17,12 +17,12 @@ std::vector<std::vector<double> > makeAMatrix(QTableWidget* bars, QTableWidget* 
 
 std::vector<double> solveSystem (std::vector<std::vector<double> > a, std::vector<double> b);
 
-double upx (double x, unsigned int l, double up0, double upl, double q, double e, double a);
+double upx (double x, double l, double up0, double upl, double q, double e, double a);
 
 std::vector<std::pair<double, double> > makeCoordsUx (std::vector<double> delta,
                                                             QTableWidget* bars, QTableWidget*nodes);
 
-double npx (double x, double e, double a, unsigned int l, double up0, double upl, double q);
+double npx (double x, double e, double a, double l, double up0, double upl, double q);
 
 std::vector<std::pair<double, double> > makeCoordsNx (std::vector<double> delta,
                                                             QTableWidget* bars, QTableWidget*nodes);
